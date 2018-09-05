@@ -74,15 +74,15 @@ const schema = buildSchema(`
     id: ID
     package_type: String
     package_status: String
-    customer: Customer
-    shipment: Shipment
+    Customer: Customer
+    Shipment: Shipment
   },
   type Shipment {
     id: ID
     shipping_label: String
     tracking_number: String
     shipper: String
-    customer: Customer
+    Customer: Customer
   },
   type Device {
     id: ID
@@ -95,7 +95,7 @@ const schema = buildSchema(`
     sim_serial_number: String
     device_type: String
     device_status: String
-    package: Package
+    Package: Package
   },  
   type Query {
     customer(id: ID!): Customer,
@@ -150,32 +150,22 @@ const schema = buildSchema(`
 const rootValue = {
   customer: (args) => { return customer.findById(args.id) },
   customers: () => { return customer.findAll() },
-  device: (args) => { return device.findById(args.id) },
-  devices: () => { return device.findAll(
+  device: (args) => { return device.findById(args.id,
       {
-          include: ["Package"],
-      }
-    )
-  },
-  package: (args) => { return package.findById(args.id) },
-  packages: () => {
-      return package.findAll({include: ["Shipment", "Customer"]}).then(package => {
-          for (var i = 0; i < package.length; i++) {
-              console.log(package[i].package_status)
-              console.log(package[i].Shipment.id)
-              console.log(package[i].Shipment.tracking_number)
-              console.log(package[i].Customer.customer_name)
-              console.log("YO")
-          }
+          attributes: { exclude: ["CustomerId"] },
+          include: ["Package"]
       })
   },
-  shipment: (args) => { return shipment.findById(args.id) },
-  shipments: () => { return shipment.findAll(
+  devices: () => { return device.findAll(
       {
-          include: ["Customer"]
+          attributes: { exclude: ["CustomerId"] },
+          include: ["Package"]
       }
-    )
-  },
+  )},
+  package: (args) => { return package.findById(args.id, { include: ["Customer", "Shipment"]})},
+  packages: () => { return package.findAll({include: ["Customer", "Shipment"]})},
+  shipment: (args) => { return shipment.findById(args.id, { include: ["Customer"]})},
+  shipments: () => { return shipment.findAll({include: ["Customer"]})},
   createCustomer: (args) => {
       return customer.create(
           {
