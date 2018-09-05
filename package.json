@@ -1,0 +1,22 @@
+{
+  "name": "fleetdb_graphql",
+  "version": "1.0.0",
+  "description": "FleetDB GraphQL scaffolding",
+  "main": "index.js",
+  "scripts": {
+    "start": "micro index.js",
+    "test": "SOMETHING HERE"
+  },
+  "author": "Don Shields (skycatch)",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^6.0.0",
+    "express-graphql": "^0.6.12",
+    "graphql": "^0.13.2",
+    "graphql-tools": "^3.1.1",
+    "micro": "^9.3.3",
+    "mysql2": "^1.6.1",
+    "sequelize": "^4.38.0",
+    "sequelize-cli": "^4.1.1"
+  }
+}
